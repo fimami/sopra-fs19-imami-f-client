@@ -75,7 +75,7 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      password: null,
+      name: null,
       username: null
     };
   }
@@ -84,39 +84,6 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    fetch(`${getDomain()}/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      })
-    })
-        .then(response => response.json())
-        .then(returnedUser => {
-          const user = new User(returnedUser);
-          // store the token into the local storage
-          localStorage.setItem("token", user.token);
-          localStorage.setItem("id", user.id);
-          localStorage.setItem("birthday", user.birthday);
-          localStorage.setItem("username", this.state.username);
-          localStorage.setItem("password", this.state.password);
-          // user login successfully worked --> navigate to the route /game in the GameRouter
-          this.props.history.push(`/game`);
-        })
-        .catch(err => { /*
-        if (err.message.match(/Failed to fetch/)) {
-          alert("The server cannot be reached. Did you start it?");
-        } else {
-          alert(`Something went wrong during the login: ${err.message}`);
-        }*/
-          this.props.history.push(`/FailedRegister`);
-        });
-  }
-
-  register() {
     fetch(`${getDomain()}/users`, {
       method: "POST",
       headers: {
@@ -124,87 +91,81 @@ class Login extends React.Component {
       },
       body: JSON.stringify({
         username: this.state.username,
-        password: this.state.password
+        name: this.state.name
       })
     })
         .then(response => response.json())
         .then(returnedUser => {
-          this.props.history.push(`/register`);
+            const user = new User(returnedUser);
+            // store the token into the local storage
+            localStorage.setItem("token", user.token);
+            // user login successfully worked --> navigate to the route /game in the GameRouter
+            this.props.history.push(`/game`);
         })
         .catch(err => {
-          /*if (err.message.match(/Failed to fetch/)) {
-            alert("The server cannot be reached. Did you start it?");
-          } else {
-            alert(`Something went wrong during the login: ${err.message}`);
-          }*/
-          this.props.history.push(`/FailedRegister`);
+            if (err.message.match(/Failed to fetch/)) {
+                alert("The server cannot be reached. Did you start it?");
+            } else {
+                alert(`Something went wrong during the login: ${err.message}`);
+            }
         });
   }
 
-  /**
-   *  Every time the user enters something in the input field, the state gets updated.
-   * @param key (the key of the state for identifying the field that needs to be updated)
-   * @param value (the value that gets assigned to the identified state key)
-   */
-  handleInputChange(key, value) {
-    // Example: if the key is username, this statement is the equivalent to the following one:
-    // this.setState({'username': value});
-    this.setState({ [key]: value });
-  }
+    /**
+     *  Every time the user enters something in the input field, the state gets updated.
+     * @param key (the key of the state for identifying the field that needs to be updated)
+     * @param value (the value that gets assigned to the identified state key)
+     */
+    handleInputChange(key, value) {
+        // Example: if the key is username, this statement is the equivalent to the following one:
+        // this.setState({'username': value});
+        this.setState({ [key]: value });
+    }
 
-  /**
-   * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
-   * Initialization that requires DOM nodes should go here.
-   * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-   * You may call setState() immediately in componentDidMount().
-   * It will trigger an extra rendering, but it will happen before the browser updates the screen.
-   */
-  componentDidMount() {}
+    /**
+     * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
+     * Initialization that requires DOM nodes should go here.
+     * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+     * You may call setState() immediately in componentDidMount().
+     * It will trigger an extra rendering, but it will happen before the browser updates the screen.
+     */
+    componentDidMount() {}
 
-  render() {
-    return (
-        <BaseContainer>
-          <FormContainer>
-            <Form>
-              <Label>Username</Label>
-              <InputField
-                  placeholder="Enter here.."
-                  onChange={e => {
-                    this.handleInputChange("username", e.target.value);
-                  }}
-              />
-              <Label>Password</Label>
-              <InputField
-                  placeholder="Enter here.."
-                  onChange={e => {
-                    this.handleInputChange("password", e.target.value);
-                  }}
-              />
-              <ButtonContainer>
-                <Button
-                    disabled={!this.state.username || !this.state.password}
-                    width="50%"
-                    onClick={() => {
-                      this.login();
-                    }}
-                >
-                  Login
-                </Button>
-                <Button
-                    disabled={!this.state.username || !this.state.password}
-                    width="50%"
-                    onClick={() => {
-                      this.register();
-                    }}
-                >
-                  Register
-                </Button>
-              </ButtonContainer>
-            </Form>
-          </FormContainer>
-        </BaseContainer>
-    );
-  }
+    render() {
+        return (
+            <BaseContainer>
+                <FormContainer>
+                    <Form>
+                        <Label>Username</Label>
+                        <InputField
+                            placeholder="Enter here.."
+                            onChange={e => {
+                                this.handleInputChange("username", e.target.value);
+                            }}
+                        />
+                        <Label>Name</Label>
+                        <InputField
+                            placeholder="Enter here.."
+                            onChange={e => {
+                                this.handleInputChange("name", e.target.value);
+                            }}
+                        />
+                        <ButtonContainer>
+                            <Button
+                                disabled={!this.state.username || !this.state.name}
+                                width="50%"
+                                onClick={() => {
+                                    this.login();
+                                }}
+                            >
+                                Login
+                            </Button>
+                        </ButtonContainer>
+                    </Form>
+                </FormContainer>
+            </BaseContainer>
+        );
+    }
 }
 
 /**
