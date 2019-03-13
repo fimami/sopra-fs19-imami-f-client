@@ -6,8 +6,8 @@ import { isProduction } from "./isProduction";
  * @returns {string}
  */
 export const getDomain = () => {
-  const prodUrl = "https://sopra-fs19-admingroup-server.herokuapp.com"; // TODO: insert your groups heroku prod url for server (once deployed)
-  const devUrl = "http://localhost:8080";
+  const prodUrl = "https://sopra-fs19-imami-f-server.herokuapp.com"; // TODO: insert your groups heroku prod url for server (once deployed)
+  const devUrl = "http://localhost:8080";                            // finished
   if (isProduction()) {
     return prodUrl;
   }
