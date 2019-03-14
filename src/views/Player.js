@@ -30,6 +30,7 @@ const Id = styled.div`
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
+
 const Player = ({ user }) => {
   return (
     <Container>
