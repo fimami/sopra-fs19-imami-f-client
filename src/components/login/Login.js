@@ -58,6 +58,12 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const Message = styled.label`
+  color:white;
+  margin-top: 5px;
+  text-align: center;
+`
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -140,12 +146,17 @@ class Login extends React.Component {
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
     componentDidMount() {}
-
+    alertMessage(){
+        return this.state.alertText
+    }
     render() {
         return (
             <BaseContainer>
                 <FormContainer>
                     <Form>
+
+                        <Message>{this.alertMessage()}</Message>
+
                         <Label>Username</Label>
                         <InputField
                             placeholder="Enter here.."
