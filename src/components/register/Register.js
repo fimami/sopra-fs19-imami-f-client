@@ -5,6 +5,7 @@ import { getDomain } from "../../helpers/getDomain";
 import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
+import Player from "../../views/Player";
 
 const FormContainer = styled.div`
   margin-top: 2em;
