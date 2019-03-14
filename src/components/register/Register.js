@@ -5,7 +5,7 @@ import { getDomain } from "../../helpers/getDomain";
 import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
-import Player from "../../views/Player";
+
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -30,6 +30,10 @@ const Form = styled.div`
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
+
+const Margin = styled.div`
+    margin-top: 2em;
+`
 
 const InputField = styled.input`
   &::placeholder {
@@ -57,6 +61,12 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const Message = styled.label`
+    color:white;
+    margin-bottom:5px;
+    text-align:center;
+`
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -66,7 +76,7 @@ const ButtonContainer = styled.div`
  * https://reactjs.org/docs/react-component.html
  * @Class
  */
-class Login extends React.Component {
+class Register extends React.Component {
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
      * The constructor for a React component is called before it is mounted (rendered).
@@ -76,15 +86,21 @@ class Login extends React.Component {
     constructor() {
         super();
         this.state = {
+            username: null,
             password: null,
-            username: null
+            birthday: null,
+            alertText: ""
         };
     }
     /**
      * HTTP POST request is sent to the backend.
      * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
      */
-    login() {
+    login(){
+        this.props.history.push('/login');
+    }
+    register() {
+        let currentDate = new Date().toUTCString(); //get current Date of registration
         fetch(`${getDomain()}/users`, {
             method: "POST",
             headers: {
@@ -92,16 +108,19 @@ class Login extends React.Component {
             },
             body: JSON.stringify({
                 username: this.state.username,
-                password: this.state.password
+                password: this.state.password,
+                birthday: this.state.birthday,
+                registrationDate: currentDate
             })
         })
-            .then(response => response.json())
-            .then(returnedUser => {
-                const user = new User(returnedUser);
-                // store the token into the local storage
-                localStorage.setItem("token", user.token);
-                // user login successfully worked --> navigate to the route /game in the GameRouter
-                this.props.history.push(`/game`);
+
+            .then(response => {
+                if(response.status === 409 || response.status === 500){
+                    //duplicate, username already exists
+                    this.setState({alertText: "This username already exists!"})
+                }else{
+                    this.props.history.push(`/login`);
+                }
             })
             .catch(err => {
                 if (err.message.match(/Failed to fetch/)) {
@@ -130,6 +149,10 @@ class Login extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
+    alertMessage(){
+        return this.state.alertText
+    }
+
     componentDidMount() {}
 
     render() {
@@ -137,29 +160,47 @@ class Login extends React.Component {
             <BaseContainer>
                 <FormContainer>
                     <Form>
+                        <Margin> </Margin>
+                        <Message>{this.alertMessage()}</Message>
+                        <Margin> </Margin>
                         <Label>Username</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="Your username"
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
                         <Label>Password</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="********"
                             onChange={e => {
                                 this.handleInputChange("password", e.target.value);
                             }}
                         />
+                        <Label>Birth date</Label>
+                        <InputField
+                            type="date"
+                            placeholder="DD.MM.YYYY"
+                            onChange={e=>{
+                                this.handleInputChange("birthday",e.target.value);
+                            }}
+                            />
                         <ButtonContainer>
                             <Button
                                 disabled={!this.state.username || !this.state.password}
                                 width="50%"
                                 onClick={() => {
-                                    this.login();
+                                    this.register();
                                 }}
                             >
-                                Login
+                                Register
+                            </Button>
+                            <Button
+                                width="50%"
+                            onClick={()=>{
+                                this.login();
+                            }}>
+                                Back to Login
                             </Button>
                         </ButtonContainer>
                     </Form>

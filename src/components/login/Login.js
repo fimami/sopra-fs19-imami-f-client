@@ -60,9 +60,13 @@ const ButtonContainer = styled.div`
 
 const Message = styled.label`
   color:white;
-  margin-top: 5px;
+  margin-bottom: 5px;
   text-align: center;
 `
+
+const Margin = styled.div`
+    margin-top: 2em;
+`;
 
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
@@ -109,7 +113,8 @@ class Login extends React.Component {
         .then(response => response.json())
         .then(returnedUser => {
             if(returnedUser.status === 404 || returnedUser.status ===500){
-                this.setState({alertText: "Benutzername oder Passwort sind falsch!"})
+                //user does not exist
+                this.setState({alertText: "Username or Password are wrong!"})
             }else {
                 console.log(returnedUser);
                 const user = new User(returnedUser);
@@ -125,6 +130,9 @@ class Login extends React.Component {
                 alert(`Something went wrong during the login: ${err.message}`);
             }
         });
+  }
+  register(){
+      this.props.history.push(`/register`);
   }
 
     /**
@@ -154,19 +162,19 @@ class Login extends React.Component {
             <BaseContainer>
                 <FormContainer>
                     <Form>
-
+                        <Margin> </Margin>
                         <Message>{this.alertMessage()}</Message>
-
+                        <Margin> </Margin>
                         <Label>Username</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="Your Username"
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
                         <Label>Password</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="********"
                             onChange={e => {
                                 this.handleInputChange("password", e.target.value);
                             }}
@@ -181,8 +189,15 @@ class Login extends React.Component {
                             >
                                 Login
                             </Button>
+                            <Button
+                                width="70%"
+                                onClick={()=>{
+                                this.register();
+                                }}
+                                >
+                                Register a new account
+                            </Button>
                         </ButtonContainer>
-
 
                     </Form>
                 </FormContainer>
