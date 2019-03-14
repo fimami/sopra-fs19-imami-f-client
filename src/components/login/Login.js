@@ -78,7 +78,11 @@ class Login extends React.Component {
     super();
     this.state = {
       password: null,
-      username: null
+      username: null,
+      users: [],
+      userExists: false,
+      invalidUser: false,
+      alertText: ""
     };
   }
   /**
