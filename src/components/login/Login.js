@@ -90,7 +90,7 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    fetch(`${getDomain()}/users`, {
+    fetch(`${getDomain()}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -167,12 +167,7 @@ class Login extends React.Component {
                                 Login
                             </Button>
                         </ButtonContainer>
-                        <ButtonContainer>
-                            <ButtonContainer
 
-                                >
-
-                            </ButtonContainer>
 
                     </Form>
                 </FormContainer>
