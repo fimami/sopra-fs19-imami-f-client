@@ -5,7 +5,6 @@ import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
-
 const FormContainer = styled.div`
   margin-top: 2em;
   display: flex;
@@ -20,7 +19,7 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 60%;
-  height: 375px;
+  height: 450px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
@@ -31,8 +30,8 @@ const Form = styled.div`
 `;
 
 const Margin = styled.div`
-    margin-top: 2em;
-`
+  margin-top: 2em;
+`;
 
 const InputField = styled.input`
   &::placeholder {
@@ -61,10 +60,10 @@ const ButtonContainer = styled.div`
 `;
 
 const Message = styled.label`
-    color:white;
-    margin-bottom:5px;
-    text-align:center;
-`
+  color: white;
+  margin-bottom: 5px;
+  text-align: center;
+`;
 
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
@@ -95,11 +94,8 @@ class Register extends React.Component {
      * HTTP POST request is sent to the backend.
      * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
      */
-    login(){
-        this.props.history.push('/login');
-    }
     register() {
-        let currentDate = new Date().toUTCString(); //get current Date of registration
+        let currentDate = new Date().toUTCString(); //get current Date
         fetch(`${getDomain()}/users`, {
             method: "POST",
             headers: {
@@ -109,15 +105,15 @@ class Register extends React.Component {
                 username: this.state.username,
                 password: this.state.password,
                 birthday: this.state.birthday,
-                registrationDate: currentDate
+                date: currentDate
             })
         })
-
             .then(response => {
-                if(response.status === 409 || response.status === 500){
-                    //duplicate, username already exists
-                    this.setState({alertText: "This username already exists!"})
-                }else{
+                if(response.status === 409 || response.status === 500) {
+                    //doublicated username
+                    this.setState({alertText: "Dieser Benutzername existiert bereits!"})
+                }
+                else {
                     this.props.history.push(`/login`);
                 }
             })
@@ -130,6 +126,7 @@ class Register extends React.Component {
             });
     }
 
+
     /**
      *  Every time the user enters something in the input field, the state gets updated.
      * @param key (the key of the state for identifying the field that needs to be updated)
@@ -141,6 +138,11 @@ class Register extends React.Component {
         this.setState({ [key]: value });
     }
 
+    alertMessage(){
+        return this.state.alertText
+    }
+
+
     /**
      * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
      * Initialization that requires DOM nodes should go here.
@@ -148,10 +150,6 @@ class Register extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
-    alertMessage(){
-        return this.state.alertText
-    }
-
     componentDidMount() {}
 
     render() {
@@ -162,46 +160,43 @@ class Register extends React.Component {
                         <Margin> </Margin>
                         <Message>{this.alertMessage()}</Message>
                         <Margin> </Margin>
-                        <Label>Username</Label>
+                        <Label>Benutzername</Label>
                         <InputField
-                            placeholder="Your username"
+                            placeholder="Hansruedi Rüdisüli..."
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
-                        <Label>Password</Label>
+                        <Label>Passwort</Label>
                         <InputField
-                            placeholder="********"
+                            type="password"
+                            placeholder="*******"
                             onChange={e => {
                                 this.handleInputChange("password", e.target.value);
                             }}
                         />
-                        <Label>Birth date</Label>
+                        <Label>Geburtsdatum</Label>
                         <InputField
                             type="date"
                             placeholder="DD.MM.YYYY"
-                            onChange={e=>{
-                                this.handleInputChange("birthday",e.target.value);
+                            onChange={e => {
+                                this.handleInputChange("birthday", e.target.value);
                             }}
-                            />
+                        />
                         <ButtonContainer>
                             <Button
-                                disabled={!this.state.username || !this.state.password}
+                                disabled={!this.state.username || !this.state.password || !this.state.birthday}
                                 width="50%"
                                 onClick={() => {
                                     this.register();
                                 }}
                             >
-                                Register
-                            </Button>
-                            <Button
-                                width="50%"
-                            onClick={()=>{
-                                this.login();
-                            }}>
-                                Back to Login
+                                Registrieren
                             </Button>
                         </ButtonContainer>
+                        <Margin> </Margin>
+                        <a href="/login" style={{color: '#FCFFF7'}}>Du hast bereits einen Account? Login!</a>
+                        <Margin> </Margin>
                     </Form>
                 </FormContainer>
             </BaseContainer>

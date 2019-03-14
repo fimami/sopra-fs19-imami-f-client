@@ -6,7 +6,6 @@ import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
-
 const FormContainer = styled.div`
   margin-top: 2em;
   display: flex;
@@ -29,6 +28,10 @@ const Form = styled.div`
   border-radius: 5px;
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
+`;
+
+const Margin = styled.div`
+  margin-top: 2em;
 `;
 
 const InputField = styled.input`
@@ -58,13 +61,9 @@ const ButtonContainer = styled.div`
 `;
 
 const Message = styled.label`
-  color:white;
+  color: white;
   margin-bottom: 5px;
   text-align: center;
-`
-
-const Margin = styled.div`
-    margin-top: 2em;
 `;
 
 /**
@@ -77,62 +76,58 @@ const Margin = styled.div`
  * @Class
  */
 class Login extends React.Component {
-  /**
-   * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
-   * The constructor for a React component is called before it is mounted (rendered).
-   * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
-   * These fields are then handled in the onChange() methods in the resp. InputFields
-   */
-  constructor() {
-    super();
-    this.state = {
-      password: null,
-      username: null,
-      users: [],
-      userExists: false,
-      invalidUser: false,
-      alertText: ""
-    };
-  }
-  /**
-   * HTTP POST request is sent to the backend.
-   * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
-   */
-  login() {
-    fetch(`${getDomain()}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      })
-    })
-        .then(response => response.json())
-        .then(returnedUser => {
-            if(returnedUser.status === 404 || returnedUser.status ===500){
-                //user does not exist
-                this.setState({alertText: "Username or Password are wrong!"})
-            }else {
-                console.log(returnedUser);
-                const user = new User(returnedUser);
-                // store the token into the local storage
-                localStorage.setItem("token", user.token);
-                // user login successfully worked --> navigate to the route /game in the GameRouter
-                this.props.history.push(`/game`);
-            }})
-        .catch(err => {
-            if (err.message.match(/Failed to fetch/)) {
-                alert("The server cannot be reached. Did you start it?");
-            } else {
-                alert(`Something went wrong during the login: ${err.message}`);
-            }
-        });
-  }
-  register(){
-      this.props.history.push(`/register`);
-  }
+    /**
+     * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
+     * The constructor for a React component is called before it is mounted (rendered).
+     * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
+     * These fields are then handled in the onChange() methods in the resp. InputFields
+     */
+    constructor() {
+        super();
+        this.state = {
+            username: null,
+            password: null,
+            users: [],
+            userExists: false,
+            invalidUser: false,
+            alertText: ""
+        };
+    }
+    /**
+     * HTTP POST request is sent to the backend.
+     * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
+     */
+    login() {
+        fetch(`${getDomain()}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password
+            })
+        })
+            .then(response => response.json())
+            .then(returnedUser => {
+                if (returnedUser.status === 404 || returnedUser.status === 500) {
+                    //  user doesn't exist
+                    this.setState({alertText: "Benutzername oder Passwort sind falsch!"})
+                } else {
+                    console.log(returnedUser);
+                    const user = new User(returnedUser);
+                    localStorage.setItem("token", user.token);
+                    this.props.history.push(`/game`);
+                }
+            })
+            .catch(err => {
+                if (err.message.match(/Failed to fetch/)) {
+                    alert("The server cannot be reached. Did you start it?");
+                } else {
+                    alert(`Something went wrong during the login: ${err.message}`);
+                }
+            });
+    }
 
     /**
      *  Every time the user enters something in the input field, the state gets updated.
@@ -156,6 +151,7 @@ class Login extends React.Component {
     alertMessage(){
         return this.state.alertText
     }
+
     render() {
         return (
             <BaseContainer>
@@ -164,16 +160,17 @@ class Login extends React.Component {
                         <Margin> </Margin>
                         <Message>{this.alertMessage()}</Message>
                         <Margin> </Margin>
-                        <Label>Username</Label>
+                        <Label>Benutzername</Label>
                         <InputField
-                            placeholder="Your Username"
+                            placeholder="Hansruedi Rüdisüli..."
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
-                        <Label>Password</Label>
+                        <Label>Passwort</Label>
                         <InputField
-                            placeholder="********"
+                            type ="password"
+                            placeholder="*******"
                             onChange={e => {
                                 this.handleInputChange("password", e.target.value);
                             }}
@@ -188,16 +185,10 @@ class Login extends React.Component {
                             >
                                 Login
                             </Button>
-                            <Button
-                                width="70%"
-                                onClick={()=>{
-                                this.register();
-                                }}
-                                >
-                                Register a new account
-                            </Button>
                         </ButtonContainer>
-
+                        <Margin> </Margin>
+                        <a href="/register" style={{color: '#FCFFF7'}}>Neu? Registrieren!</a>
+                        <Margin> </Margin>
                     </Form>
                 </FormContainer>
             </BaseContainer>
