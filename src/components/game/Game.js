@@ -23,6 +23,7 @@ const PlayerContainer = styled.li`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  //cursor: pointer;
 `;
 
 class Game extends React.Component {
@@ -35,6 +36,20 @@ class Game extends React.Component {
   }
 
   logout() {
+      let currentToken = localStorage.getItem("token");
+      fetch(`${getDomain()}/users`,{
+          method: "PUT",
+          headers: {
+              "Content-Type":"application/json"
+          },
+          body: JSON.stringify({
+              token: currentToken
+          })
+      })
+          .catch(err=>{
+              console.log(err);
+              alert("Something went wrong fetching the users: "+err);
+          });
     localStorage.removeItem("token");
     this.props.history.push("/login");
   }
@@ -65,7 +80,7 @@ class Game extends React.Component {
 
     return (
         <Container>
-          <h2>Happy Coding! </h2>
+          <h2>Welcome to Santorini! </h2>
           <p>Get all users from secure end point:</p>
           {!this.state.users ? (
               <Spinner />
@@ -74,7 +89,7 @@ class Game extends React.Component {
                 <Users>
                   {this.state.users.map(user => {
                     return (
-                        <PlayerContainer key={user.id}>
+                        <PlayerContainer onClick={()=>(this.props.history.push({pathname:`/users/${user.id}`,state:user.id}))} key={user.id}>
                           <Player user={user} />
                         </PlayerContainer>
                     );
