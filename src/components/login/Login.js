@@ -102,6 +102,14 @@ class Login extends React.Component {
     })
         .then(response => response.json())
         .then(returnedUser => {
+            if(returnedUser.status === 404 || returnedUser.status ===500){
+                this.setState({alertText: "Benutzername oder Passwort sind falsch!"})
+            }else{
+                console.log(returnedUser);
+                const user = new User(returnedUser);
+                localStorage.setItem("token", user.token);
+                this.props.history.push(`/game`);
+            }
             const user = new User(returnedUser);
             // store the token into the local storage
             localStorage.setItem("token", user.token);
