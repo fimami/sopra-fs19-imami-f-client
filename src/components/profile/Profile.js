@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
-import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
@@ -99,7 +98,7 @@ class Profile extends React.Component {
             birthDate: null,
             token: null,
             editMode: false,
-            editButtonText:"edit Profile",
+            editButtonText:"Edit Profile",
             oldUsername:null,
             oldBirthDate: null,
             editModeText: "User-Information"
@@ -134,7 +133,7 @@ class Profile extends React.Component {
             .catch(err => {
                 alert(`Something went wrong during the login: ${err.message}`);
 
-            });     //maybe syntax error
+            })     //maybe syntax error
     }
 
     /**
