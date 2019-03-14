@@ -112,7 +112,7 @@ class Login extends React.Component {
             .then(returnedUser => {
                 if (returnedUser.status === 404 || returnedUser.status === 500) {
                     //  user doesn't exist
-                    this.setState({alertText: "Benutzername oder Passwort sind falsch!"})
+                    this.setState({alertText: "Username or Password are wrong!"})
                 } else {
                     console.log(returnedUser);
                     const user = new User(returnedUser);
@@ -160,14 +160,14 @@ class Login extends React.Component {
                         <Margin> </Margin>
                         <Message>{this.alertMessage()}</Message>
                         <Margin> </Margin>
-                        <Label>Benutzername</Label>
+                        <Label>Username</Label>
                         <InputField
-                            placeholder="Hansruedi Rüdisüli..."
+                            placeholder="Enter Username..."
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
-                        <Label>Passwort</Label>
+                        <Label>Password</Label>
                         <InputField
                             type ="password"
                             placeholder="*******"
@@ -187,7 +187,7 @@ class Login extends React.Component {
                             </Button>
                         </ButtonContainer>
                         <Margin> </Margin>
-                        <a href="/register" style={{color: '#FCFFF7'}}>Neu? Registrieren!</a>
+                        <a href="/register" style={{color: '#FCFFF7'}}>New here? Register now!</a>
                         <Margin> </Margin>
                     </Form>
                 </FormContainer>

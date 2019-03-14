@@ -66,7 +66,7 @@ class Profile extends React.Component{
             birthDate: null,
             token: null,
             editMode: false,
-            editButtonText: "Profil editieren",
+            editButtonText: "Edit Profile",
             oldUsername: null,
             oldBirthDate: null,
             editModeText: "User-Information"
@@ -131,7 +131,7 @@ class Profile extends React.Component{
                         username: this.state.oldUsername,
                         birthDate: this.state.oldBirthDate
                     })
-                    alert("Could not update Usersettings, Username already taken.")
+                    alert("Could not update the Profile, Username already taken.")
                 }
             })
             .catch(err =>{
@@ -144,13 +144,13 @@ class Profile extends React.Component{
             return(
                 <div>
                     <form>
-                        <label> Benutzername: &nbsp; </label>
+                        <label> Username: &nbsp; </label>
                         <InputField type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
                     </form>
-                    <p>Passwort: ********</p>
+                    <p>Password: ********</p>
                     <p>Online Status: {this.state.onlineStatus}</p>
                     <form>
-                        <label> Geburtsdatum: &nbsp; </label>
+                        <label> Birth Date: &nbsp; </label>
                         <InputField type="date" value={this.state.birthDate} onChange={this.handleBirthChange}/>
 
                     </form>
@@ -160,10 +160,10 @@ class Profile extends React.Component{
         }
         return(
             <div>
-                <p>Benutzername: {this.state.username}</p>
-                <p>Passwort: *******</p>
+                <p>Username: {this.state.username}</p>
+                <p>Password: *******</p>
                 <p>Status: {this.state.onlineStatus}</p>
-                <p>Geburtsdatum: {this.state.birthDate}</p>
+                <p>Birth Date: {this.state.birthDate}</p>
                 <p>Creation Date: {this.state.creationDate}</p>
             </div>
         )
@@ -172,10 +172,10 @@ class Profile extends React.Component{
 
     render() {
         const textElement = this.getText();
-        if(localStorage.getItem("token")===null){return(<Container><h1>You must be logged in to view this page!</h1></Container>)}
+        if(localStorage.getItem("token")===null){return(<Container><h1>You must be logged in to see this page!</h1></Container>)}
         else{
             if(this.state.username === null){
-                return(<Container><h1>Userpage does not exist!</h1></Container>)
+                return(<Container><h1>User does not exist!</h1></Container>)
             }
             return (
                 <BaseContainer>
@@ -196,7 +196,7 @@ class Profile extends React.Component{
                                                 }
                                                 this.setState({
                                                     editMode: !this.state.editMode,
-                                                    editButtonText: (!this.state.editMode)?"Save":"Profil editieren",
+                                                    editButtonText: (!this.state.editMode)?"Save":"Edit Profile",
                                                     editModeText: (!this.state.editMode)?"Edit User Profile":"User-Information"
                                                 })
                                             }}
@@ -211,7 +211,7 @@ class Profile extends React.Component{
                                                 this.props.history.push("/game/dashboard");
                                             }}
                                         >
-                                            Zurück
+                                            Back
                                         </Button>
                                     </ButtonContainer>
                                 </div>

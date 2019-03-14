@@ -110,8 +110,8 @@ class Register extends React.Component {
         })
             .then(response => {
                 if(response.status === 409 || response.status === 500) {
-                    //doublicated username
-                    this.setState({alertText: "Dieser Benutzername existiert bereits!"})
+                    //duplicated username
+                    this.setState({alertText: "This username already exists!"})
                 }
                 else {
                     this.props.history.push(`/login`);
@@ -160,14 +160,14 @@ class Register extends React.Component {
                         <Margin> </Margin>
                         <Message>{this.alertMessage()}</Message>
                         <Margin> </Margin>
-                        <Label>Benutzername</Label>
+                        <Label>Username</Label>
                         <InputField
-                            placeholder="Hansruedi Rüdisüli..."
+                            placeholder="Enter Username..."
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
-                        <Label>Passwort</Label>
+                        <Label>Password</Label>
                         <InputField
                             type="password"
                             placeholder="*******"
@@ -175,7 +175,7 @@ class Register extends React.Component {
                                 this.handleInputChange("password", e.target.value);
                             }}
                         />
-                        <Label>Geburtsdatum</Label>
+                        <Label>Birth Date</Label>
                         <InputField
                             type="date"
                             placeholder="DD.MM.YYYY"
@@ -191,11 +191,11 @@ class Register extends React.Component {
                                     this.register();
                                 }}
                             >
-                                Registrieren
+                                Register
                             </Button>
                         </ButtonContainer>
                         <Margin> </Margin>
-                        <a href="/login" style={{color: '#FCFFF7'}}>Du hast bereits einen Account? Login!</a>
+                        <a href="/login" style={{color: '#FCFFF7'}}>Do you already have an account? Login!</a>
                         <Margin> </Margin>
                     </Form>
                 </FormContainer>

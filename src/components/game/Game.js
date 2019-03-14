@@ -78,8 +78,8 @@ class Game extends React.Component {
     render() {
         return (
             <Container>
-                <h2>Dashboard!</h2>
-                <p>Folgend sind alle Accounts aufgelistet:</p>
+                <h2>Welcome to Santorini!</h2>
+                <p>Existing accounts:</p>
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
